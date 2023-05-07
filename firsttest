@@ -1,0 +1,17 @@
+import vk_api
+from vk_api.longpoll import VkLongPoll, VkEventType
+
+vk_session = vk_api.VkApi(token="vk1.a.z9B5lQWCqCuGpB7Om6p2mLDb4Tybt4vxHF6Th49OU9_YVJTEnlDr7su4DvxRrRpy97QqNPPxk353RT47GzcKLcP8iGwQCEbm26ittrF843_YlE3dVtAhc-MIUsXjk9bcKMfdJMMYqY2fFPB3BNAVobtfrF_MqSGDl7U404A3Uhp4bwoma6EwI2ilWS4fw21ajfujqNF93cAkj1kQo_1ylg")
+session_api = vk_session.get_api()
+longpool = VkLongPoll(vk_session)
+
+def send_some_msg(id, some_text):
+    vk_session.method("messages.send", {"user_id":id, "message":some_text,"random_id":0})
+
+for event in longpool.listen():
+    if event.type == VkEventType.MESSAGE_NEW:
+        if event.to_me:
+            msg = event.text.lower()
+            id = event.user_id
+            if msg == "привет":
+                send_some_msg(id, "хелоу")
